@@ -1,0 +1,108 @@
+## Info endpoint
+info:
+  app:
+    name: API Gateway
+
+# Define the port where the API gateway server would be running
+server:
+  port: ${PORT:9000}
+
+# The OAuth2 server definition that would be used to send the authorization requests to
+authserver:
+    hostname: localhost
+    port: 9999
+    contextPath: uaa
+    
+# Define the routes which determine what URL are serviced by what applications.
+# The application/services are defined in the bootstrap.yml file of individual applications
+# using the spring.application.name property.
+
+zuul:
+  routes:
+    command-side-blog:
+      path: /command/blog/**
+    query-side-blog:
+      path: /query/blog/**
+    command-side-project:
+      path: /command/project/**
+    query-side-project:
+      path: /query/project/**
+
+# Define the Eureka server that handles service registration
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.registry.credentials.uri:http://localhost:8761}/eureka/
+
+spring:
+  application:
+    queue: gateway.event.stream
+    terminal: gateway.axon.terminal
+    blog:
+      exchange: blog.events.fanout.exchange
+    project:
+      exchange: project.events.fanout.exchange
+  rabbitmq:
+    hostname: 127.0.0.1
+    username: guest
+    password: guest
+  oauth2:
+    sso:
+      home:
+        secure: false
+        path: /,/**/*.html
+    client:
+      accessTokenUri: http://${authserver.hostname}:${authserver.port}/${authserver.contextPath}/oauth/token
+      userAuthorizationUri: http://${authserver.hostname}:${authserver.port}/${authserver.contextPath}/oauth/authorize
+      clientId: acme
+      clientSecret: acmesecret
+    resource:
+      jwt:
+        keyUri: http://${authserver.hostname}:${authserver.port}/${authserver.contextPath}/oauth/token_key
+        keyValue: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnGp/Q5lh0P8nPL21oMMrt2RrkT9AW5jgYwLfSUnJVc9G6uR3cXRRDCjHqWU5WYwivcF180A6CWp/ireQFFBNowgc5XaA0kPpzEtgsA5YsNX7iSnUibB004iBTfU9hZ2Rbsc8cWqynT0RyN4TP1RYVSeVKvMQk4GT1r7JCEC+TNu1ELmbNwMQyzKjsfBXyIOCFU/E94ktvsTZUHF4Oq44DBylCDsS1k7/sfZC2G5EU7Oz0mhG8+Uz6MSEQHtoIi6mc8u64Rwi3Z3tscuWG2ShtsUFuNSAFNkY7LkLn+/hxLCu2bNISMaESa8dG22CIMuIeRLVcAmEWEWH5EEforTg+QIDAQAB
+          -----END PUBLIC KEY-----
+
+
+
+
+---
+spring:
+  profiles: docker
+  rabbitmq:
+    hostname: my-rabbit
+    username: test
+    password: password
+  data:
+    mongodb:
+      uri: mongodb://my-mongo:27017/blogposts
+
+eureka:
+# Register our microservices to Eureka using hostnames in a Docker environment will not work, they will all get 
+# one and the same hostname. Instead we configure them to use its IP address during registration with Eureka.
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://registry:8761/eureka/
+
+# The OAuth2 server definition that would be used to send the authorization requests to
+authserver:
+  hostname: authserver
+  port: 9999
+  contextPath: uaa
+  
+---
+spring:
+  profiles: cloud
+
+authserver:
+  hostname: ${vcap.services.authserver.credentials.uri}
+  port: 80
+  contextPath: uaa
+  
+eureka:
+  instance:
+    hostname: ${vcap.application.uris[0]}
+    nonSecurePort: 80
