@@ -12,4 +12,4 @@ logging:
 
 security:
   user:
-    password: password
+    password: 123123
