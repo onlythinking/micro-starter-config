@@ -5,18 +5,18 @@ info:
 
 # Define the port where the API gateway server would be running
 server:
-  port: ${PORT:9000}
+  port: ${PORT:8080}
     
 # Define the routes which determine what URL are serviced by what applications.
 # The application/services are defined in the bootstrap.yml file of individual applications
 # using the spring.application.name property.
 
-# zuul:
-#   routes:
-#     command-side-blog:
-#       path: /command/blog/**
-#     query-side-blog:
-#       path: /query/blog/**
+ zuul:
+   routes:
+     command-users:
+       path: /command/users/**
+     query-users:
+       path: /query/users/**
 
 # Define the Eureka server that handles service registration
 eureka:
@@ -30,8 +30,6 @@ spring:
   profiles: docker
 
 eureka:
-# Register our microservices to Eureka using hostnames in a Docker environment will not work, they will all get 
-# one and the same hostname. Instead we configure them to use its IP address during registration with Eureka.
   instance:
     preferIpAddress: true
   client:

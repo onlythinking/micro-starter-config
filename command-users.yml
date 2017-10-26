@@ -46,9 +46,16 @@ eureka:
 spring:
   profiles: docker
   rabbitmq:
-    host: my-rabbit
-    username: test
-    password: password
+    host: rabbitmq
+    username: micro
+    password: micro
   data:
     mongodb:
-      uri: mongodb://my-mongo:27017/users
+      uri: mongodb://mongodb:27017/users
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://registry:8761/eureka/
