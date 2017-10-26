@@ -11,12 +11,12 @@ server:
 # The application/services are defined in the bootstrap.yml file of individual applications
 # using the spring.application.name property.
 
- zuul:
-   routes:
-     command-users:
-       path: /command/users/**
-     query-users:
-       path: /query/users/**
+zuul:
+  routes:
+    command-users:
+      path: /command/users/**
+    query-users:
+      path: /query/users/**
 
 # Define the Eureka server that handles service registration
 eureka:
