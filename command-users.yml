@@ -4,7 +4,7 @@ info:
     description: Users service - Command Side (CQRS)
 
 server:
-  port: ${PORT:8881}
+  port: ${PORT:8880}
 
 logging:
   level:
