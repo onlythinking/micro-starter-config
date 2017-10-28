@@ -2,4 +2,8 @@ info:
   app:
     name: My Microservice example
     description: Microservice
-  
+
+# Product env remove..
+management:
+  security:
+    enabled: false
