@@ -16,9 +16,10 @@ eureka:
 
 spring:
   profiles: docker
-  cloud:
-    inetutils:
-      preferredNetworks: micro-starter_default
+# Fix docker swarm network error.
+#  cloud:
+#    inetutils:
+#      preferredNetworks: micro-starter_default
 
 eureka:
   client:

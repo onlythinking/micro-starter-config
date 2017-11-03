@@ -52,13 +52,15 @@ spring:
   data:
     mongodb:
       uri: mongodb://mongodb:27017/users
-  cloud:
-    inetutils:
-      preferredNetworks: micro-starter_default
+# Fix docker swarm network error.
+#  cloud:
+#    inetutils:
+#      preferredNetworks: micro-starter_default
 
 eureka:
   instance:
-    preferIpAddress: true
+    preferIpAddress: false
+    hostname: users-command-side
   client:
     serviceUrl:
       defaultZone: http://registry:8761/eureka/
