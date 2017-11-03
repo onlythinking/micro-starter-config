@@ -16,7 +16,9 @@ eureka:
 ---
 spring:
   profiles: docker
- 
+  cloud:
+    inetutils:
+      preferredNetworks: micro-starter_default
 
 eureka:
 # Register our microservices to Eureka using hostnames in a Docker environment will not work, they will all get 

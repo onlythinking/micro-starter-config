@@ -52,6 +52,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://mongodb:27017/users
+  cloud:
+    inetutils:
+      preferredNetworks: micro-starter_default
 
 eureka:
   instance:

@@ -28,6 +28,9 @@ eureka:
 ---
 spring:
   profiles: docker
+  cloud:
+    inetutils:
+      preferredNetworks: micro-starter_default
 
 eureka:
   instance:
